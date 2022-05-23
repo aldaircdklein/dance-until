@@ -1,0 +1,13 @@
+{
+  "name": "danceuntil",
+  "version": "1.0.0",
+  "description": "jogo de danca",
+  "main": "index.js",
+  "repository": "https://github.com/aldaircdklein/dance-until.git",
+  "author": "Aldair Camargo",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "socket.io": "^4.5.1"
+  }
+}
