@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import socketIOClient from "socket.io-client";
 import QRCode from "react-qr-code";
 import axios from "axios";
+import {GiMusicalNotes} from 'react-icons/gi';
 const api = axios.create({baseURL: "http://localhost:3003",});
 const socket = socketIOClient("http://localhost:3003/");
 
@@ -12,23 +13,35 @@ function App() {
   const [duration, setDuration] = useState(1);
   const [ip, setIp] = useState('');
   const [pause, setPause] = useState(true);
+  const [players, setPlayers] = useState([]);
 
   const handleIp = async () => {
     const result = await api.get('ip');
     setIp(result.data.address);
+    socket.on('newPlayers', (res) => {
+      const list = players;
+      list.unshift(res.data.username);
+      setPlayers(Array.from(list));
+    })
   }
 
   const handleSocket = () => {
     socket.emit('status', {status:true, init:true});
-    setInterval(() => {
+    const interval = setInterval(() => {
       const random = Math.random() > 0.5 ? true : false
       socket.emit('status', {status:random, init:true});
       console.log(random);
       setPause(random);
       handleMusic(random);
-    }, 30000)
+    }, 25000)
     setTimeout(() => {
-
+      socket.emit('finish', {status:true});
+      clearInterval(interval);
+      setTimeout(() => {
+        music.pause();
+        stopMusic.pause();
+      }, 3000)
+      setNavbar(true);
     }, duration * 60000);
   }
 
@@ -112,10 +125,19 @@ function App() {
           <img className="h-screen w-screen" src="./assets/luz.gif" onClick={() => {setNavbar(!navbar)}} />
         )
       }
-      <p className="absolute right-0 m-2 text-white">
-        O Dance Until é um jogo com objetivo
-        de estimular a diversão!
-      </p>
+      <div className="absolute right-0 m-2 bg-black/75 p-2 rounded-lg">
+        <p className="text-white w-64">
+          O Dance Until é um jogo para que você 
+          demostre seu controle sobre a música!
+        </p>
+        <ul className="text-green-500">
+          {
+            players.map(element => (
+              <li className="flex" key={element}><GiMusicalNotes /> - {element}</li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   );
 }

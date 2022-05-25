@@ -22,7 +22,17 @@ io.on('connection', (socket) => {
   socket.on('status', (req) => {
     console.log('status',req);
     socket.broadcast.emit('newStatus', {data:req});
-  })  
+  })
+  
+  socket.on('players', (req) => {
+    console.log('newPlayers',req);
+    socket.broadcast.emit('newPlayers', {data:req});
+  })
+
+  socket.on('finish', (req) => {
+    console.log('finish',req);
+    socket.broadcast.emit('newFinish', {data:req});
+  })
   
   socket.on('disconnect', () => {
     console.log('user disconnected');
