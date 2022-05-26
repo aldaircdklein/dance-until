@@ -18,13 +18,7 @@ app.get('/ip', function(req, res, next) {
 });
 
 app.get('/', function(req, res, next) {
-  res.send(`
-    <html>
-      <body>
-        <a href="http://localhost:3003/index.js" download>Baixe o apk</a>
-      </body>
-    </html>
-  `);
+  res.download('./danceuntil.apk')
 });
 
 io.on('connection', (socket) => {
