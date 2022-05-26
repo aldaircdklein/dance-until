@@ -15,7 +15,7 @@ Como e executar:
 3 - Execute o comando "yarn start"
 4 - Abra outro terminal do SO
 5 - Navegue até a pasta "web"
-6 - Execute o comando "yarn start"
+6 - Execute o comando "yarn serve"
 
 Observação: Conecte todos os dispositivos que irão participar na mesma rede wi-fi,
 não é necessário que haja acesso a internet!
