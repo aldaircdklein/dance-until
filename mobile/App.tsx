@@ -63,7 +63,7 @@ export default function App() {
               }
             }
           }else{
-            if(x > 0.9 || y > 0.9 || z > 0.9){
+            if(x > 1 || y > 1 || z > 1){
               console.log('para parar')
               setGamerOuver(true);
               gameOuver2 = true;
