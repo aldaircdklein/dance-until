@@ -121,7 +121,7 @@ function App() {
               backgroundRepeat: 'no-repeat'}}
     >
       {
-        (
+        victory && (
           <div className="flex absolute justify-center items-center top-0 bottom-0 left-0 right-0 bg-black/75 z-20">
             <div className="flex flex-col p-2 justify-center h-5/6 w-3/6 bg-black rounded-lg">
               <h1 className="text-green-500 font-bold text-3xl text-center">Fim de Jogo!</h1>
