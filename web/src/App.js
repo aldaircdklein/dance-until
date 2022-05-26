@@ -3,6 +3,8 @@ import socketIOClient from "socket.io-client";
 import QRCode from "react-qr-code";
 import axios from "axios";
 import {GiMusicalNotes} from 'react-icons/gi';
+import {BsPlayFill} from 'react-icons/bs';
+import {IoReloadOutline} from 'react-icons/io5';
 const api = axios.create({baseURL: "http://localhost:3003",});
 const socket = socketIOClient("http://localhost:3003/");
 
@@ -14,14 +16,19 @@ function App() {
   const [ip, setIp] = useState('');
   const [pause, setPause] = useState(true);
   const [players, setPlayers] = useState([]);
+  const [playersVictory, setPlayersVictory] = useState([]);
+  const [playersGameOuver, setPlayersGameOuver] = useState([]);
+  const [victory, setVictory] = useState(false);
 
   const handleIp = async () => {
     const result = await api.get('ip');
     setIp(result.data.address);
     socket.on('newPlayers', (res) => {
-      const list = players;
-      list.unshift(res.data.username);
-      setPlayers(Array.from(list));
+      if(!players.includes(res.data.username)){
+        const list = players;
+        list.unshift(res.data.username);
+        setPlayers(Array.from(list));
+      }
     })
   }
 
@@ -36,12 +43,32 @@ function App() {
     }, 25000)
     setTimeout(() => {
       socket.emit('finish', {status:true});
+      socket.on('newResult', (res) => {
+        if(res.data.status){
+          if(!playersVictory.includes(res.data.username)){
+            const list = playersVictory;
+            list.unshift(res.data.username);
+            setPlayersVictory(Array.from(list));
+          }
+        }else{
+          if(!playersGameOuver.includes(res.data.username)){
+            const list = playersGameOuver;
+            list.unshift(res.data.username);
+            setPlayersGameOuver(Array.from(list));
+          }
+        }
+      })
       clearInterval(interval);
       setTimeout(() => {
         music.pause();
         stopMusic.pause();
-      }, 3000)
+        const victoryMusic = new Audio('./music/victory.mp3');
+        victoryMusic.play();
+        victoryMusic.playbackRate = 1;
+        victoryMusic.loop =true;
+      }, 1000)
       setNavbar(true);
+      setVictory(true);
     }, duration * 60000);
   }
 
@@ -76,6 +103,11 @@ function App() {
     handleMusic(true);
   }
 
+  const reload = () => {
+    socket.emit('reload');
+    window.location.reload();
+  }
+
   useEffect(() => {
     handleIp()
   }, [])
@@ -89,18 +121,48 @@ function App() {
               backgroundRepeat: 'no-repeat'}}
     >
       {
+        victory && (
+          <div className="flex absolute justify-center items-center top-0 bottom-0 left-0 right-0 bg-black/75 z-20">
+            <div className="flex flex-col p-2 justify-center h-5/6 w-3/6 bg-black rounded-lg">
+              <h1 className="text-green-500 font-bold text-3xl text-center">Fim de Jogo!</h1>
+              <p className="text-white text-center text-xl">Veja o resultado na tela do seu celular!</p>
+              <p className="text-white mt-16">Resultado de alguns jogadores:</p>
+              <div className="grid grid-cols-2 ">
+                <ul className="text-green-500">
+                  {
+                    playersVictory.map(element => (
+                      <li className="flex" key={element}><GiMusicalNotes /> - {element}</li>
+                    ))
+                  }
+                </ul>
+                <ul className="text-red-500">
+                  {
+                    playersGameOuver.map(element => (
+                      <li className="flex" key={element}><GiMusicalNotes /> - {element}</li>
+                    ))
+                  }
+                </ul>
+              </div>
+              <button type="button" className="flex justify-center items-center bg-blue-500 rounded-2xl mt-12 px-6 py-2 animate-bounce text-white" onClick={() => {reload()}}>
+                <IoReloadOutline className="mr-2"/>Novo jogo
+              </button>
+            </div>
+          </div>
+        )
+      }
+      {
         navbar? (
-          <div className="flex flex-col items-center bg-white w-2/6 h-screen" onClick={() => {setNavbar(!navbar)}}>
+          <div className="flex flex-col items-center bg-white w-2/6 h-screen">
             <div className="flex items-center mt-6">
               <img src="./assets/logo.png" className="h-12"/>
               <h1 className="text-xl text-center">Dance Until</h1>
             </div>
             <button 
               type="button"
-              className="bg-blue-600 text-white py-2 px-6 w-36 animate-bounce mt-6 rounded-2xl font-bold"
+              className="flex items-center justify-center bg-blue-600 text-white py-2 px-6 w-36 animate-bounce mt-6 rounded-2xl font-bold"
               onClick={() => {init()}}
             >
-              PLAY
+              <BsPlayFill />PLAY
             </button>
             <div className="flex mb-6 mt-6">
               <p>Duração (em minutos): </p>
@@ -129,6 +191,9 @@ function App() {
         <p className="text-white w-64">
           O Dance Until é um jogo para que você 
           demostre seu controle sobre a música!
+        </p>
+        <p className="text-green-500 w-64 underline">
+          Alguns jogadores:
         </p>
         <ul className="text-green-500">
           {

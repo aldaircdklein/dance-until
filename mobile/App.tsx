@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Image, Button, TextInput } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import socketIOClient from "socket.io-client";
 import { Accelerometer } from 'expo-sensors';
 
 export default function App() {
+  const [navbar, setNavbar] = useState(true);
   const [scanned, setScanned] = useState(false);
   const [gamerOuver, setGamerOuver] = useState(false);
+  const [gamerOuver3, setGamerOuver3] = useState(false);
+  let gameOuver2 = false;
   const [pause, setPause] = useState(true);
+  const [username, setUsername] = useState('');
   const [victory, setVictory] = useState(false);
 
   const handleSocket = (url: string) => {
     console.log(url);
     const socket = socketIOClient(`http://${url}`);
     console.log('entrei')
-    socket.emit('players', {username: 'Aldair doidão'});
+    socket.emit('players', {username});
     socket.on("newStatus", (req) => {
       console.log(req.data.status);
       setPause(!req.data.status);
@@ -22,7 +26,14 @@ export default function App() {
     })
     socket.on("newFinish", (req) => {
       console.log(req.data.status);
+      socket.emit('result', {status:!gameOuver2, username})
       handleFinish(req.data.status);
+    })
+    socket.on("newReload", () => {
+      reload();
+      setTimeout(() => {
+        socket.emit('players', {username});
+      }, 5000)
     })
   }
 
@@ -30,6 +41,7 @@ export default function App() {
     if(state){
       setVictory(!gamerOuver);
       Accelerometer.removeAllListeners();
+      setGamerOuver3(gameOuver2);
     }
   }
 
@@ -39,26 +51,36 @@ export default function App() {
         Accelerometer.removeAllListeners();
         Accelerometer.addListener(accelerometerData => {
           console.log(accelerometerData)
+          const x = Math.abs(Math.trunc(accelerometerData.x * 100) / 100);
+          const y = Math.abs(Math.trunc(accelerometerData.y * 100) / 100);
+          const z = Math.abs(Math.trunc(accelerometerData.z * 100) / 100);
           if(state){
-            if(Number(Math.abs(accelerometerData.x).toFixed(2)) == 0.99 || Number(Math.abs(accelerometerData.y).toFixed(2)) == 0.99 || Number(Math.abs(accelerometerData.z).toFixed(2)) == 0.99){
-              if(Math.abs(Math.trunc(accelerometerData.x)) == 0 && Math.abs(Math.trunc(accelerometerData.y)) == 0 || 
-                  Math.abs(Math.trunc(accelerometerData.y)) == 0 && Math.abs(Math.trunc(accelerometerData.z)) == 0 ||
-                  Math.abs(Math.trunc(accelerometerData.z)) == 0 && Math.abs(Math.trunc(accelerometerData.x)) == 0
-              ){
+            if(x == 0.99 || y == 0.99 || z == 0.99){
+              if(x == 0.0 && y == 0.0 || y == 0.0 && z == 0.0 || z == 0.0 && x == 0.0){
                 console.log('para dançar')
                 setGamerOuver(true);
+                gameOuver2 = true;
               }
             }
           }else{
-            if(Math.abs(accelerometerData.x) > 1 || Math.abs(accelerometerData.y) > 1 || Math.abs(accelerometerData.z) > 1){
+            if(x > 0.9 || y > 0.9 || z > 0.9){
               console.log('para parar')
               setGamerOuver(true);
+              gameOuver2 = true;
             }
           }
         })
         Accelerometer.setUpdateInterval(1000);
       }, 1000)
     }
+  }
+
+  const reload = () => {
+    setGamerOuver(false);
+    setGamerOuver3(false);
+    gameOuver2 = false;
+    setPause(true);
+    setVictory(false);
   }
 
   useEffect(() => {
@@ -76,12 +98,28 @@ export default function App() {
   return (
     <View style={styles.container}>
       {
-        !scanned && (
+        navbar && (
+          <>
+            <Image source={require('./assets/logo.png')} style={{width: 150, height: 150}} />
+            <Text style={{color: 'white', fontSize: 30}}>Dance Until</Text>
+            <TextInput
+              placeholder='Nome de jogador'
+              value={username}
+              onChangeText={setUsername}
+              style={{color: 'yellow', fontSize: 20,marginTop: 55, marginBottom: 55, textAlign: 'center'}}
+            />
+            <Button title='Iniciar' onPress={() => {setNavbar(false)}}></Button>
+          </>
+        )
+      }
+      {
+        !scanned && !navbar &&(
           <>
             <BarCodeScanner
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
               style={StyleSheet.absoluteFillObject}
             />
+            <Text style={{color: 'yellow', fontSize: 30}}>Aponte para o QRCode</Text>
           </>
         )
       }
@@ -96,7 +134,7 @@ export default function App() {
         )
       }
       {
-        gamerOuver && !victory && (
+        !victory && gamerOuver3 || gamerOuver && (
           <>
             <ImageBackground source={require('./assets/gameouver.jpg')} style={{width: 400, flex: 1}} />
             <Text style={{color: 'white', fontSize: 20, position: 'absolute'}}>Você perdeu!</Text>
@@ -126,5 +164,6 @@ const styles = StyleSheet.create({
     zIndex: 10,
     position: 'absolute',
     flex: 1,
+    height: 96
   }
 });

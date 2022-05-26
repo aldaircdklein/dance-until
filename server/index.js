@@ -17,6 +17,16 @@ app.get('/ip', function(req, res, next) {
     res.send({address: ip.address()});
 });
 
+app.get('/', function(req, res, next) {
+  res.send(`
+    <html>
+      <body>
+        <a href="http://localhost:3003/index.js" download>Baixe o apk</a>
+      </body>
+    </html>
+  `);
+});
+
 io.on('connection', (socket) => {
 
   socket.on('status', (req) => {
@@ -32,6 +42,16 @@ io.on('connection', (socket) => {
   socket.on('finish', (req) => {
     console.log('finish',req);
     socket.broadcast.emit('newFinish', {data:req});
+  })
+
+  socket.on('reload', (req) => {
+    console.log('reload',req);
+    socket.broadcast.emit('newReload');
+  })
+
+  socket.on('result', (req) => {
+    console.log('newResult',req);
+    socket.broadcast.emit('newResult', {data:req});
   })
   
   socket.on('disconnect', () => {
