@@ -49,6 +49,6 @@ Como alterar a música:
 1 - Baixe a música do seu gosto em formato "mp3"
 2 - Para a música rápida altere o nome do arquivo para "music.mp3"
 3 - Para a música lenta altere o nome do arquivo para "music2.mp3"
-4 - Copie o arquivo, vá até a pasta "web" > "public" > "music"
+4 - Copie o arquivo, vá até a pasta "web" > "build" > "music"
 5 - Exclua o arquivo com mesmo nome e cole o seu
 6 - Execute o jogo
