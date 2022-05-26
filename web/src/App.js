@@ -15,9 +15,9 @@ function App() {
   const [duration, setDuration] = useState(1);
   const [ip, setIp] = useState('');
   const [pause, setPause] = useState(true);
-  const [players, setPlayers] = useState([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
-  const [playersVictory, setPlayersVictory] = useState([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
-  const [playersGameOuver, setPlayersGameOuver] = useState([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
+  const [players, setPlayers] = useState([]);
+  const [playersVictory, setPlayersVictory] = useState([]);
+  const [playersGameOuver, setPlayersGameOuver] = useState([]);
   const [victory, setVictory] = useState(false);
 
   const handleIp = async () => {
