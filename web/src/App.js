@@ -15,9 +15,9 @@ function App() {
   const [duration, setDuration] = useState(1);
   const [ip, setIp] = useState('');
   const [pause, setPause] = useState(true);
-  const [players, setPlayers] = useState([]);
-  const [playersVictory, setPlayersVictory] = useState([]);
-  const [playersGameOuver, setPlayersGameOuver] = useState([]);
+  const [players, setPlayers] = useState([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
+  const [playersVictory, setPlayersVictory] = useState([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
+  const [playersGameOuver, setPlayersGameOuver] = useState([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]);
   const [victory, setVictory] = useState(false);
 
   const handleIp = async () => {
@@ -121,21 +121,21 @@ function App() {
               backgroundRepeat: 'no-repeat'}}
     >
       {
-        victory && (
+        (
           <div className="flex absolute justify-center items-center top-0 bottom-0 left-0 right-0 bg-black/75 z-20">
             <div className="flex flex-col p-2 justify-center h-5/6 w-3/6 bg-black rounded-lg">
               <h1 className="text-green-500 font-bold text-3xl text-center">Fim de Jogo!</h1>
               <p className="text-white text-center text-xl">Veja o resultado na tela do seu celular!</p>
               <p className="text-white mt-16">Resultado de alguns jogadores:</p>
-              <div className="grid grid-cols-2 ">
-                <ul className="text-green-500">
+              <div className="grid grid-cols-2 space-x-12 px-4">
+                <ul className="text-green-500 h-48 overflow-y-scroll">
                   {
                     playersVictory.map(element => (
                       <li className="flex" key={element}><GiMusicalNotes /> - {element}</li>
                     ))
                   }
                 </ul>
-                <ul className="text-red-500">
+                <ul className="text-red-500 h-48 overflow-y-scroll">
                   {
                     playersGameOuver.map(element => (
                       <li className="flex" key={element}><GiMusicalNotes /> - {element}</li>
@@ -187,7 +187,7 @@ function App() {
           <img className="h-screen w-screen" src="./assets/luz.gif" onClick={() => {setNavbar(!navbar)}} />
         )
       }
-      <div className="absolute right-0 m-2 bg-black/75 p-2 rounded-lg">
+      <div className="absolute right-0 m-2 bg-black/75 p-2 rounded-lg h-6/6">
         <p className="text-white w-64">
           O Dance Until é um jogo para que você 
           demostre seu controle sobre a música!
@@ -195,7 +195,7 @@ function App() {
         <p className="text-green-500 w-64 underline">
           Alguns jogadores:
         </p>
-        <ul className="text-green-500">
+        <ul className="text-green-500 h-96 overflow-y-scroll">
           {
             players.map(element => (
               <li className="flex" key={element}><GiMusicalNotes /> - {element}</li>
