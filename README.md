@@ -9,6 +9,12 @@ Seu smartphone irá indicar se você ganhou ou perdeu!
 Esse jogo pode ser jogado em familia, entre amigos, nas festas e eventos e possivelmente ser utilizado para campeonatos com premiações!
 Ah e o mais importante, tome cuidado com os outros jogadores próximos, pois eles podem te prejudicar! kkkkkkk
 
+**Dependências**
+- NodeJs >= 14.x
+- Yarn
+- Smartphone - Android >= 7.1
+- PC - Linux, Windows ou Mac
+
 **Como configurar**
 ```
 1 - Abra o terminal do SO
