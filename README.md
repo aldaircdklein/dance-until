@@ -40,10 +40,10 @@ não é necessário que haja acesso a internet!
 ```
 1 - Abra o navegador do PC e digite "http://localhost:3000".
 2 - Com os aparelhos celulares faça o scanner do QRCode e abra o link no navegador do dispositivo
-3 - Clique em "Baixe o apk"
+3 - Permita o download do apk
 4 - Instale o aplicativo baixado
-5 - Abra o aplicativo e faça a leitura do QRCode novamente
-6 - Após ter terminado de ler o QRCode com todos os dispositivos clique em "PLAY" no PC
+5 - Abra o aplicativo, digite o nome de jogador e faça a leitura do QRCode novamente
+6 - Após ter terminado de ler o QRCode com todos os dispositivos clique em "PLAY" no PC e pronto
 ```
 **Regras e objetivo do jogo:**
 ```
