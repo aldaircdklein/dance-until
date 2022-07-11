@@ -110,7 +110,7 @@ const Player = () => {
     }, []);
 
     const handleInit = () => {
-        handleSocket('192.168.0.120:3003');
+        handleSocket('https://danceuntil.herokuapp.com/');
         setNavbar(false)
     };
 

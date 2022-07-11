@@ -5,8 +5,7 @@ import axios from "axios";
 import {GiMusicalNotes} from 'react-icons/gi';
 import {BsPlayFill} from 'react-icons/bs';
 import {IoReloadOutline} from 'react-icons/io5';
-const api = axios.create({baseURL: "http://localhost:3003",});
-const socket = socketIOClient("http://localhost:3003/");
+const socket = socketIOClient("https://danceuntil.herokuapp.com/");
 
 const Main = () => {
   const [navbar, setNavbar] = useState(true);
@@ -21,8 +20,7 @@ const Main = () => {
   const [victory, setVictory] = useState(false);
 
   const handleIp = async () => {
-    const result = await api.get('ip');
-    setIp(result.data.address);
+    setIp('https://aldaircdklein.github.io/dance-until/');
     socket.on('newPlayers', (res) => {
       if(!players.includes(res.data.username)){
         const list = players;
@@ -176,7 +174,7 @@ const Main = () => {
               />
             </div>
             <div>
-              <QRCode value={`${ip}:3003`}/>
+              <QRCode value={`${ip}`}/>
             </div>
           </div>
         ):
