@@ -8,7 +8,7 @@ import {IoReloadOutline} from 'react-icons/io5';
 const api = axios.create({baseURL: "http://localhost:3003",});
 const socket = socketIOClient("http://localhost:3003/");
 
-function App() {
+const Main = () => {
   const [navbar, setNavbar] = useState(true);
   const music = new Audio('./music/music.mp3');
   const stopMusic = new Audio('./music/music2.mp3');
@@ -207,4 +207,4 @@ function App() {
   );
 }
 
-export default App;
+export default Main;
